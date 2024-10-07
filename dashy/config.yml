@@ -1,28 +1,10 @@
 pageInfo:
   title: PlasticFire Lab
-sections: # An array of sections
-  - name: Outer Services
+sections:
+  - name: Remote Services
     icon: far fa-rocket
     items:
-      - title: GitHub
-        description: Dashy source code and docs
-        icon: fab fa-github
-        url: https://github.com/plasticfiresam
-      - title: Issues
-        description: View open issues, or raise a new one
-        icon: fas fa-bug
-        url: https://github.com/Lissy93/dashy/issues
-  - name: Local Services
-    items:
-      - title: Router
-        icon: fas fa-bug
-        url: http://192.168.50.1/
-      - title: NAS Server
-        icon: fas fa-bug
-        url: http://192.168.50.2:8080/
-      - title: Jellyfin
-        icon: fas fa-bug
-        url: http://192.168.50.2:8096/
-      - title: qBittorrent
-        icon: fas fa-bug
-        url: http://192.168.50.2:30024/
+      - title: Monitor
+        url: https://monitor.remote.plasticfire.tech
+      - title: Syncthing
+        url: https://sync.remote.plasticfire.tech
