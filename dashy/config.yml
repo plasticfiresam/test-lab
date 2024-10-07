@@ -5,6 +5,6 @@ sections:
     icon: far fa-rocket
     items:
       - title: Monitor
-        url: https://monitor.remote.plasticfire.tech
+        url: https://monitor-remote.plasticfire.tech
       - title: Syncthing
-        url: https://sync.remote.plasticfire.tech
+        url: https://sync-remote.plasticfire.tech
