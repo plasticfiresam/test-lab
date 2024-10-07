@@ -4,7 +4,7 @@ services:
     container_name: nginx_proxy
     image: nginx:latest
     volumes:
-      - './proxy/nginx.conf:/etc/nginx/conf.d/default.conf'
+      - './nginx/nginx.conf:/etc/nginx/conf.d/default.conf'
       - './ssl:/etc/ssl'  # Add this line
     ports:
       - "80:80"
