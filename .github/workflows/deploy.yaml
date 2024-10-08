@@ -32,6 +32,6 @@ jobs:
           ssh -o StrictHostKeyChecking=no $VPS_USER@$VPS_HOST << 'EOF'
             cd $PROJECT_PATH
             git pull origin main  # или нужная ветка
-            docker-compose down
-            docker-compose up -d --build
+            docker compose down
+            docker compose up -d --build
           EOF
