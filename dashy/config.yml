@@ -8,3 +8,15 @@ sections:
         url: https://monitor-remote.plasticfire.tech
       - title: Syncthing
         url: https://sync-remote.plasticfire.tech
+  - name: Widgets
+    icon: far fa-rocket
+    widgets:
+      - type: github-profile-stats
+        options:
+          username: plasticfiresam
+          hideLanguagesCard: true
+      - type: hackernews-trending
+        options:
+          stories: newstories
+          limit: 10
+      - type: system-info
