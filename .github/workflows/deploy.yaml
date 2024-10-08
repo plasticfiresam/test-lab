@@ -26,10 +26,12 @@ jobs:
         env:
           VPS_USER: ${{ secrets.VPS_USER }} # Пользователь сервера из окружения "tech"
           VPS_HOST: ${{ secrets.VPS_HOST }} # IP-адрес сервера из окружения "tech"
-          PROJECT_PATH: ${{ secrets.PROJECT_PATH }} # Путь к проекту на сервере из окружения "tech"
+          PROJECT_PATH: /home/$VPS_USER/tech/test-lab # Явно указываем полный путь до проекта
+
         run: |
-          ssh -o StrictHostKeyChecking=no $VPS_USER@$VPS_HOST
-          cd tech/test-lab
-          git pull origin main
-          docker-compose down
-          docker-compose up -d --build
+          ssh -o StrictHostKeyChecking=no $VPS_USER@$VPS_HOST << 'EOF'
+            cd $PROJECT_PATH
+            git pull origin main  # или нужная ветка
+            docker-compose down
+            docker-compose up -d --build
+          EOF
