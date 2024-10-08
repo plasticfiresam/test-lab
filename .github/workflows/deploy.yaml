@@ -1,37 +1,58 @@
-name: Deploy to VPS
+name: Deploy to VPS using GitHub Deployments API
 
 on:
   push:
-    paths:
-      - "docker-compose.yml"
-      - "**/*.conf" # Другие конфигурационные файлы, которые важны для перезапуска
-      - "**/*.yml"
-      - "**/*.yaml"
+    branches:
+      - main  # Деплой срабатывает при пуше в ветку main
 
 jobs:
-  deploy:
+  create_deployment:
     runs-on: ubuntu-latest
-    environment: tech # Указание на использование окружения "tech"
-
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
+    - name: Create deployment
+      uses: actions/github-script@v4
+      with:
+        script: |
+          const { data: deployment } = await github.repos.createDeployment({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            ref: context.sha,
+            required_contexts: []  # Отключаем проверки для деплоя
+          });
+          return deployment.id;
 
-      - name: Set up SSH
-        uses: webfactory/ssh-agent@v0.5.3
-        with:
-          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }} # Использование секретов из окружения
+  deploy:
+    needs: create_deployment
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
 
-      - name: Deploy services
-        env:
-          VPS_USER: ${{ secrets.VPS_USER }} # Пользователь сервера из окружения "tech"
-          VPS_HOST: ${{ secrets.VPS_HOST }} # IP-адрес сервера из окружения "tech"
-          PROJECT_PATH: /root/tech/test-lab # Явно указываем полный путь до проекта
+    - name: Set up SSH
+      uses: webfactory/ssh-agent@v0.5.3
+      with:
+        ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
-        run: |
-          ssh -o StrictHostKeyChecking=no $VPS_USER@$VPS_HOST << 'EOF'
-            cd $PROJECT_PATH
-            git pull origin main  # или нужная ветка
-            docker compose down
-            docker compose up -d --build
-          EOF
+    - name: Deploy services
+      env:
+        VPS_USER: ${{ secrets.VPS_USER }}
+        VPS_HOST: ${{ secrets.VPS_HOST }}
+        PROJECT_PATH: /root/tech/test-lab
+      run: |
+        ssh -o StrictHostKeyChecking=no $VPS_USER@$VPS_HOST << 'EOF'
+          cd $PROJECT_PATH
+          git pull origin main
+          docker-compose down
+          docker-compose up -d --build
+        EOF
+
+    - name: Update deployment status
+      uses: actions/github-script@v4
+      with:
+        script: |
+          await github.repos.createDeploymentStatus({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            deployment_id: deployment_id,
+            state: 'success'  # Обновление статуса на 'success' после деплоя
+          });
