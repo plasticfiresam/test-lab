@@ -29,7 +29,7 @@ jobs:
           PROJECT_PATH: ${{ secrets.PROJECT_PATH }} # Путь к проекту на сервере из окружения "tech"
         run: |
           ssh -o StrictHostKeyChecking=no $VPS_USER@$VPS_HOST
-          cd /root/tech/test-lab
+          cd tech/test-lab
           git pull origin main
           docker-compose down
           docker-compose up -d --build
