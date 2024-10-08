@@ -1,0 +1,36 @@
+name: Deploy to VPS
+
+on:
+  push:
+    paths:
+      - "docker-compose.yml"
+      - "**/*.conf" # Другие конфигурационные файлы, которые важны для перезапуска
+      - "**/*.yml"
+      - "**/*.yaml"
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: tech # Указание на использование окружения "tech"
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up SSH
+        uses: webfactory/ssh-agent@v0.5.3
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }} # Использование секретов из окружения
+
+      - name: Deploy services
+        env:
+          VPS_USER: ${{ secrets.VPS_USER }} # Пользователь сервера из окружения "tech"
+          VPS_HOST: ${{ secrets.VPS_HOST }} # IP-адрес сервера из окружения "tech"
+          PROJECT_PATH: ${{ secrets.PROJECT_PATH }} # Путь к проекту на сервере из окружения "tech"
+        run: |
+          ssh -o StrictHostKeyChecking=no $VPS_USER@$VPS_HOST << 'EOF'
+            cd $PROJECT_PATH
+            git pull origin main  # или нужная ветка
+            docker-compose down
+            docker-compose up -d --build
+          EOF
