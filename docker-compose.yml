@@ -75,7 +75,7 @@ services:
       STATE: Tomsk
       COUNTRY_CODE: ru
     healthcheck:
-      test: ["CMD-SHELL", "curl -f http://domain:8080 || exit 1"]
+      test: ["CMD-SHELL", "curl -f https://draw.plasticfire.tech || exit 1"]
       interval: 1m30s
       timeout: 10s
       retries: 5
