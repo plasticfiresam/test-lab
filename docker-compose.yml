@@ -60,15 +60,23 @@ services:
       timeout: 10s
       retries: 3
   
-  overseerr:
-    image: sctx/overseerr:latest
-    container_name: overseerr
-    environment:
-      # - LOG_LEVEL=debug
-      - TZ=Asia/Krasnoyarsk
-      - PORT=5055 #optional
-    ports:
-      - 5055:5055
-    volumes:
-      - /overseer:/app/config
+  drawio:
+    image: jgraph/drawio
+    container_name: drawio
     restart: unless-stopped
+    ports:
+      - 8181:8080
+      - 8282:8443
+    environment:
+      PUBLIC_DNS: draw.plasticfire.tech
+      ORGANISATION_UNIT: Mobile
+      ORGANISATION: PlasticFireTech
+      CITY: Tomsk
+      STATE: Tomsk
+      COUNTRY_CODE: ru
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://domain:8080 || exit 1"]
+      interval: 1m30s
+      timeout: 10s
+      retries: 5
+      start_period: 10s

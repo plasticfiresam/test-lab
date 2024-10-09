@@ -6,8 +6,8 @@ sections:
     items:
       - title: Monitor
         url: https://monitor-remote.plasticfire.tech
-      - title: Media Requests
-        url: https://request-remote.plasticfire.tech
+      - title: Draw
+        url: https://draw.plasticfire.tech
       - title: Syncthing
         url: https://sync-remote.plasticfire.tech
   - name: News
