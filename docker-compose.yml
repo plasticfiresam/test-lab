@@ -67,13 +67,6 @@ services:
     ports:
       - 8181:8080
       - 8282:8443
-    environment:
-      PUBLIC_DNS: draw.plasticfire.tech
-      ORGANISATION_UNIT: Mobile
-      ORGANISATION: PlasticFireTech
-      CITY: Tomsk
-      STATE: Tomsk
-      COUNTRY_CODE: ru
     healthcheck:
       test: ["CMD-SHELL", "curl -f https://draw.plasticfire.tech || exit 1"]
       interval: 1m30s
